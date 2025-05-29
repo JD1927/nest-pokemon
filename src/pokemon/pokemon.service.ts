@@ -43,7 +43,7 @@ export class PokemonService {
     return `This action returns all pokemon`;
   }
 
-  async findOne(field: string): Promise<Pokemon | null> {
+  async findOne(field: string): Promise<Pokemon> {
     let pokemon: Pokemon | null = null;
 
     // Pokemon number
@@ -69,8 +69,16 @@ export class PokemonService {
     return pokemon;
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
-    return `This action updates a #${id} pokemon`;
+  async update(field: string, updatePokemonDto: UpdatePokemonDto) {
+    const pokemon: Pokemon = await this.findOne(field);
+
+    if (updatePokemonDto.name) {
+      updatePokemonDto.name = updatePokemonDto.name.toLowerCase();
+    }
+
+    await pokemon.updateOne(updatePokemonDto, { new: true });
+
+    return { ...pokemon.toJSON(), ...updatePokemonDto };
   }
 
   remove(id: number) {
