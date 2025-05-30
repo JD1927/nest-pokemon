@@ -25,17 +25,7 @@ export class PokemonService {
 
       return pokemon;
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (error.code === 11000) {
-        throw new BadRequestException(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          `Pokemon already exists in db as ${JSON.stringify(error.keyValue)}`,
-        );
-      }
-      console.log(error);
-      throw new InternalServerErrorException(
-        `Cannot create Pokemon with name '${createPokemonDto.name}'`,
-      );
+      this._handleUncontrolledExceptions(error);
     }
   }
 
@@ -63,7 +53,7 @@ export class PokemonService {
 
     if (!pokemon)
       throw new NotFoundException(
-        `Pokemon with id, name or number: "${field}" not found`,
+        `[ERROR]: Pokemon with id, name or number: "${field}" not found`,
       );
 
     return pokemon;
@@ -75,13 +65,29 @@ export class PokemonService {
     if (updatePokemonDto.name) {
       updatePokemonDto.name = updatePokemonDto.name.toLowerCase();
     }
+    try {
+      await pokemon.updateOne(updatePokemonDto, { new: true });
 
-    await pokemon.updateOne(updatePokemonDto, { new: true });
-
-    return { ...pokemon.toJSON(), ...updatePokemonDto };
+      return { ...pokemon.toJSON(), ...updatePokemonDto };
+    } catch (error) {
+      this._handleUncontrolledExceptions(error);
+    }
   }
 
   remove(id: number) {
     return `This action removes a #${id} pokemon`;
+  }
+
+  private _handleUncontrolledExceptions(error: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (error.code === 11000) {
+      throw new BadRequestException(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        `[ERROR]: Pokemon already exists in db as ${JSON.stringify(error.keyValue)}`,
+      );
+    }
+    throw new InternalServerErrorException(
+      `[ERROR]: Cannot perform action. Review server logs.`,
+    );
   }
 }
