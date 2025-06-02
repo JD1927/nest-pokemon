@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { PokeResponse } from './interfaces/poke-response.interface';
 import { PokemonService } from '../pokemon/pokemon.service';
+// import { AxiosAdapter } from '../common/adapters/axios.adapter';
 
 @Injectable()
 export class SeedService {
@@ -10,6 +11,7 @@ export class SeedService {
   constructor(
     private readonly http: HttpService,
     private readonly pokemonService: PokemonService,
+    // private readonly customHttp: AxiosAdapter,
   ) {}
 
   async populateDatabase() {
