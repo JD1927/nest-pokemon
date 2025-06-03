@@ -73,6 +73,7 @@ Clone file `.env.template` to `.env` to run things smoothly.
 
 ```bash
 MONGO_DB=mongodb://localhost:27017/nest-pokemon
+MONGO_DB_NAME=nest_pokemon_db
 PORT=3000
 DEFAULT_LIMIT=5
 ```
