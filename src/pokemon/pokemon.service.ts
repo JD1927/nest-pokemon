@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
+// DTO
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { Pokemon } from './entities/pokemon.entity';
@@ -14,14 +16,14 @@ import { Pokemon } from './entities/pokemon.entity';
 export class PokemonService {
   constructor(
     @InjectModel(Pokemon.name)
-    public readonly pokemonModel: Model<Pokemon>,
+    public readonly model: Model<Pokemon>,
   ) {}
 
   async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLowerCase();
 
     try {
-      const pokemon: Pokemon = await this.pokemonModel.create(createPokemonDto);
+      const pokemon: Pokemon = await this.model.create(createPokemonDto);
 
       return pokemon;
     } catch (error) {
@@ -29,8 +31,15 @@ export class PokemonService {
     }
   }
 
-  findAll() {
-    return `This action returns all pokemon`;
+  async findAll(paginationDto: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto;
+
+    return this.model
+      .find()
+      .limit(limit)
+      .skip(offset)
+      .sort({ no: 'asc' })
+      .select('-__v');
   }
 
   async findOne(field: string): Promise<Pokemon> {
@@ -38,15 +47,15 @@ export class PokemonService {
 
     // Pokemon number
     if (!isNaN(+field)) {
-      pokemon = await this.pokemonModel.findOne({ no: field });
+      pokemon = await this.model.findOne({ no: field });
     }
     // MongoID
     if (!pokemon && isValidObjectId(field)) {
-      pokemon = await this.pokemonModel.findById(field);
+      pokemon = await this.model.findById(field);
     }
     // Name
     if (!pokemon) {
-      pokemon = await this.pokemonModel.findOne({
+      pokemon = await this.model.findOne({
         name: field.toLowerCase().trim(),
       });
     }
@@ -75,7 +84,7 @@ export class PokemonService {
   }
 
   async remove(id: string) {
-    const { deletedCount } = await this.pokemonModel.deleteOne({ _id: id });
+    const { deletedCount } = await this.model.deleteOne({ _id: id });
 
     if (deletedCount === 0)
       throw new BadRequestException(`Pokemon with id '${id}' not found.`);

@@ -15,9 +15,12 @@ async function bootstrap() {
       // Emits an error when there are extra fields on a request
       // Indicates which property is not part of the DTO
       forbidNonWhitelisted: true,
+      transform: true,
       transformOptions: {
         // Excludes fields that are undefined on the request
         exposeUnsetFields: false,
+        // Enables implicit conversion for DTO's
+        enableImplicitConversion: true,
       },
     }),
   );
