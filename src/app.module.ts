@@ -7,11 +7,13 @@ import appConfig from './config/app.config';
 import { CommonModule } from './common/common.module';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { SeedModule } from './seed/seed.module';
+import { JoiValidationSchema } from './config/joi-validation.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [appConfig],
+      validationSchema: JoiValidationSchema,
     }),
 
     ServeStaticModule.forRoot({
