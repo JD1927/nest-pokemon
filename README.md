@@ -67,6 +67,16 @@ $ pnpm install
 $ docker-compose up -d
 ```
 
+## Environment Variables
+
+Clone file `.env.template` to `.env` to run things smoothly.
+
+```bash
+MONGO_DB=mongodb://localhost:27017/nest-pokemon
+PORT=3000
+DEFAULT_LIMIT=5
+```
+
 ## Compile and run the project
 
 ```bash
