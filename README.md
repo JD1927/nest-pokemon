@@ -67,14 +67,6 @@ $ pnpm install
 $ docker-compose up -d
 ```
 
-> Must have MongoDB up and running
-
-Execute seed request
-
-```bash
-$ {{host}}/api/v2/seed to get the pokemons
-```
-
 ## Compile and run the project
 
 ```bash
@@ -86,6 +78,16 @@ $ pnpm run start:dev
 
 # production mode
 $ pnpm run start:prod
+```
+
+## Execute seed request
+
+> Must have MongoDB up and running
+
+Execute seed request
+
+```bash
+$ {{host}}/api/v2/seed to get the pokemons
 ```
 
 ## Run tests
