@@ -16,7 +16,7 @@ export class SeedService {
 
   async populateDatabase() {
     // Delete all from the Pokemon table
-    await this.pokemonService.pokemonModel.deleteMany({});
+    await this.pokemonService.model.deleteMany({});
 
     const { data } = await this.http.axiosRef.get<PokeResponse>(
       this.pokeApiUrl,
@@ -31,7 +31,7 @@ export class SeedService {
       pokemonToInsert.push({ name, no });
     }
     // Insert pokemons inside MongoDB
-    await this.pokemonService.pokemonModel.insertMany(pokemonToInsert);
+    await this.pokemonService.model.insertMany(pokemonToInsert);
 
     return `Seed executed successfully! ✅`;
   }
