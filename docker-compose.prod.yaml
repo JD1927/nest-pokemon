@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  nest_pokemon_app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nest_pokemon_docker
+    container_name: nest_pokemon_app
+    restart: always # reiniciar el contenedor si se detiene
+    ports:
+      - '${PORT}:${PORT}'
+    # working_dir: /var/www/pokedex
+    environment:
+      MONGO_DB: ${MONGO_DB}
+      MONGO_DB_NAME: ${MONGO_DB_NAME}
+      PORT: ${PORT}
+      DEFAULT_LIMIT: ${DEFAULT_LIMIT}
+    # volumes:
+    #   - ./:/var/www/nest-pokemon
+
+  db:
+    image: mongo:latest
+    container_name: mongo_pokemon
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo:/data/db

@@ -78,6 +78,22 @@ PORT=3000
 DEFAULT_LIMIT=5
 ```
 
+## Production Build
+
+1. Must have file `.env.prod` created
+1. Set environment variables for PROD file
+1. Create a new image (containing app and database) -> Will take some time ⏳
+
+```bash
+docker-compose -f docker-compose.prod.yaml --env-file .env.prod up --build
+```
+
+> Once you've created the build image you can now execute this command in order to avoid having the process in the console.
+
+```bash
+docker-compose -f docker-compose.prod.yaml --env-file .env.prod up -d
+```
+
 ## Compile and run the project
 
 ```bash
